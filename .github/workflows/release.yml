@@ -1,0 +1,83 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag (e.g. v0.1.0)"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Resolve release tag
+        id: tag
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            TAG="${{ github.event.inputs.tag }}"
+          else
+            TAG="${GITHUB_REF#refs/tags/}"
+          fi
+          VERSION="${TAG#v}"
+          echo "tag=$TAG"          >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION"  >> "$GITHUB_OUTPUT"
+
+      - name: Stamp version + URLs into system.json
+        env:
+          REPO: ${{ github.repository }}
+          TAG: ${{ steps.tag.outputs.tag }}
+          VERSION: ${{ steps.tag.outputs.version }}
+        run: |
+          python3 - <<'PY'
+          import json, os
+          repo    = os.environ["REPO"]
+          tag     = os.environ["TAG"]
+          version = os.environ["VERSION"]
+
+          with open("system.json", "r", encoding="utf-8") as f:
+              data = json.load(f)
+
+          data["version"]  = version
+          # The "manifest" URL must always resolve to the *latest* release so
+          # Foundry's update checker keeps working.
+          data["manifest"] = f"https://github.com/{repo}/releases/latest/download/system.json"
+          # The "download" URL is pinned to this specific tag so each release
+          # serves its own zip.
+          data["download"] = f"https://github.com/{repo}/releases/download/{tag}/system.zip"
+
+          with open("system.json", "w", encoding="utf-8") as f:
+              json.dump(data, f, indent=2)
+              f.write("\n")
+          PY
+
+      - name: Build system.zip
+        run: |
+          zip -r system.zip \
+            system.json \
+            README.md \
+            module \
+            templates \
+            styles \
+            lang \
+            -x "*.git*" "*.DS_Store" "node_modules/*" "dist/*" "build/*"
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tag.outputs.tag }}
+          name: ${{ steps.tag.outputs.tag }}
+          draft: false
+          prerelease: false
+          files: |
+            system.json
+            system.zip
