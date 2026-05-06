@@ -1,0 +1,35 @@
+<form class="ved-sheet item-sheet condition">
+
+  <header class="sheet-header">
+    <img class="profile" data-edit="img" src="{{item.img}}" title="{{item.name}}" />
+    <input type="text" name="name" value="{{item.name}}" placeholder="{{localize 'VED.ConditionName'}}" />
+  </header>
+
+  <section class="sheet-body">
+    <div class="row">
+      <label>{{localize 'VED.Stackable'}} <input type="checkbox" name="system.stackable" {{checked system.stackable}} /></label>
+      <label>{{localize 'VED.Stacks'}} <input type="number" min="0" name="system.stacks" value="{{system.stacks}}" /></label>
+    </div>
+
+    <fieldset>
+      <legend>{{localize 'VED.PerTick'}}</legend>
+      <div class="row">
+        <label>{{localize 'VED.Amount'}} <input type="text" name="system.perTick.amount" value="{{system.perTick.amount}}" placeholder="magnitude / 1d4 / 2" /></label>
+        <label>{{localize 'VED.Resource.Label'}}
+          <select name="system.perTick.resource">
+            <option value="none" {{#if (ved-eq system.perTick.resource 'none')}}selected{{/if}}>{{localize 'VED.Tag.None'}}</option>
+            {{#each config.resources as |r k|}}
+              <option value="{{k}}" {{#if (ved-eq @root.system.perTick.resource k)}}selected{{/if}}>{{ved-resource-label k}}</option>
+            {{/each}}
+          </select>
+        </label>
+      </div>
+    </fieldset>
+
+    <section class="description">
+      <h3>{{localize 'VED.Description'}}</h3>
+      {{{enrichedDescription}}}
+      <textarea name="system.description">{{system.description}}</textarea>
+    </section>
+  </section>
+</form>

@@ -1,0 +1,28 @@
+<form class="ved-sheet item-sheet archetype">
+
+  <header class="sheet-header">
+    <img class="profile" data-edit="img" src="{{item.img}}" title="{{item.name}}" />
+    <input type="text" name="name" value="{{item.name}}" placeholder="{{localize 'VED.ArchetypeName'}}" />
+  </header>
+
+  <section class="sheet-body">
+    <label>{{localize 'VED.Archetype.Preset'}}
+      <select name="system.preset">
+        {{#each config.archetypes as |label k|}}
+          <option value="{{k}}" {{#if (ved-eq @root.system.preset k)}}selected{{/if}}>{{localize label}}</option>
+        {{/each}}
+      </select>
+    </label>
+
+    <section class="description">
+      <h3>{{localize 'VED.Description'}}</h3>
+      {{{enrichedDescription}}}
+      <textarea name="system.description">{{system.description}}</textarea>
+    </section>
+
+    <section class="focus">
+      <h3>{{localize 'VED.FocusNotes'}}</h3>
+      <textarea name="system.focusNotes">{{system.focusNotes}}</textarea>
+    </section>
+  </section>
+</form>

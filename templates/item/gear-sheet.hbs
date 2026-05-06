@@ -1,0 +1,22 @@
+<form class="ved-sheet item-sheet gear">
+
+  <header class="sheet-header">
+    <img class="profile" data-edit="img" src="{{item.img}}" title="{{item.name}}" />
+    <input type="text" name="name" value="{{item.name}}" placeholder="{{localize 'VED.GearName'}}" />
+  </header>
+
+  <section class="sheet-body">
+    <div class="row">
+      <label>{{localize 'VED.Quantity'}} <input type="number" min="0" name="system.quantity" value="{{system.quantity}}" /></label>
+      <label>{{localize 'VED.Weight'}} <input type="number" min="0" step="0.1" name="system.weight" value="{{system.weight}}" /></label>
+      <label>{{localize 'VED.Equipped'}} <input type="checkbox" name="system.equipped" {{checked system.equipped}} /></label>
+      <label>{{localize 'VED.Magical'}} <input type="checkbox" name="system.magical" {{checked system.magical}} /></label>
+    </div>
+
+    <section class="description">
+      <h3>{{localize 'VED.Description'}}</h3>
+      {{{enrichedDescription}}}
+      <textarea name="system.description">{{system.description}}</textarea>
+    </section>
+  </section>
+</form>

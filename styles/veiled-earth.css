@@ -1,0 +1,138 @@
+/* The Veiled Earth Directive — base sheet styles. Intentionally minimal;
+   we'll layer on theming once layouts settle. */
+
+.ved-sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  font-family: var(--font-primary, "Signika", sans-serif);
+  color: var(--color-text-primary, #1c1c1c);
+}
+
+.ved-sheet .sheet-header {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+  padding-bottom: 0.5rem;
+}
+
+.ved-sheet .profile {
+  width: 64px;
+  height: 64px;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  flex: 0 0 auto;
+  object-fit: cover;
+}
+
+.ved-sheet .header-fields {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.ved-sheet .header-fields input[name="name"] {
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.ved-sheet .row {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.ved-sheet .row label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.85rem;
+  gap: 0.15rem;
+}
+
+.ved-sheet .resources {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+
+.ved-sheet .resource .bar {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.ved-sheet .attributes {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  text-align: center;
+}
+
+.ved-sheet .attributes .attribute {
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 6px;
+  padding: 0.4rem;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.ved-sheet .attributes .die {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.ved-sheet .skill-group {
+  margin-top: 0.5rem;
+}
+
+.ved-sheet .skill-group header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ved-sheet .skill-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ved-sheet .skill-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr auto;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.25rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+.ved-sheet .skill-row .actions button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.ved-sheet .condition-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.4rem;
+}
+
+.ved-sheet fieldset {
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+  padding: 0.5rem;
+}
+
+.ved-sheet textarea {
+  min-height: 6rem;
+  width: 100%;
+}
+
+.ved-sheet .readonly {
+  font-weight: 600;
+  align-self: center;
+}

@@ -1,0 +1,41 @@
+<form class="ved-sheet npc-sheet">
+
+  <header class="sheet-header">
+    <img class="profile" data-edit="img" src="{{actor.img}}" title="{{actor.name}}" />
+    <div class="header-fields">
+      <input type="text" name="name" value="{{actor.name}}" placeholder="{{localize 'VED.NPCName'}}" />
+      <div class="row">
+        <label>{{localize 'VED.Magnitude.Label'}}
+          <select name="system.magnitude">
+            {{#each config.magnitudes as |m k|}}
+              <option value="{{k}}" {{#if (ved-eq @root.system.magnitude k)}}selected{{/if}}>{{ved-magnitude-label k}}</option>
+            {{/each}}
+          </select>
+        </label>
+        <label>{{localize 'VED.NPCKind'}}
+          <select name="system.kind">
+            <option value="monster" {{#if (ved-eq system.kind 'monster')}}selected{{/if}}>{{localize 'VED.Kind.Monster'}}</option>
+            <option value="vortex" {{#if (ved-eq system.kind 'vortex')}}selected{{/if}}>{{localize 'VED.Kind.Vortex'}}</option>
+            <option value="human" {{#if (ved-eq system.kind 'human')}}selected{{/if}}>{{localize 'VED.Kind.Human'}}</option>
+            <option value="agent" {{#if (ved-eq system.kind 'agent')}}selected{{/if}}>{{localize 'VED.Kind.Agent'}}</option>
+            <option value="other" {{#if (ved-eq system.kind 'other')}}selected{{/if}}>{{localize 'VED.Kind.Other'}}</option>
+          </select>
+        </label>
+        <label>{{localize 'VED.ThreatTier'}}
+          <input type="text" name="system.threatTier" value="{{system.threatTier}}" />
+        </label>
+      </div>
+    </div>
+  </header>
+
+  <section class="sheet-body">
+    {{> (concat 'systems/veiled-earth-directive/templates/actor/parts/resources.hbs')}}
+    {{> (concat 'systems/veiled-earth-directive/templates/actor/parts/skills.hbs')}}
+    {{> (concat 'systems/veiled-earth-directive/templates/actor/parts/conditions.hbs')}}
+
+    <section class="description">
+      <h3>{{localize 'VED.Description'}}</h3>
+      <textarea name="system.description">{{system.description}}</textarea>
+    </section>
+  </section>
+</form>
