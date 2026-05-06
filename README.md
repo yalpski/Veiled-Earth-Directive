@@ -22,14 +22,17 @@ exploding dice, and Magnitude-driven progression.
    dialog and click **Install**:
 
    ```
-   https://github.com/yalpski/veiled-earth-directive/releases/latest/download/system.json
+   https://raw.githubusercontent.com/yalpski/veiled-earth-directive/main/system.json
    ```
 
 4. Once installation finishes, create a world and pick **The Veiled Earth
    Directive** as its game system.
 
-Foundry will use the same URL to check for updates, so future releases will
-appear in-app automatically.
+Foundry will use the same URL to check for updates, so future changes pushed
+to `main` will appear in-app automatically. Once tagged releases start being
+published (see [Releases](#releases)), the manifest URL above can be swapped
+for `https://github.com/yalpski/veiled-earth-directive/releases/latest/download/system.json`
+to track stable versions instead of `main`.
 
 ### Manual / development install
 
