@@ -45,8 +45,8 @@
   "primaryTokenAttribute": "resources.health",
   "secondaryTokenAttribute": "resources.mana",
   "url": "https://github.com/yalpski/veiled-earth-directive",
-  "manifest": "https://github.com/yalpski/veiled-earth-directive/releases/latest/download/system.json",
-  "download": "https://github.com/yalpski/veiled-earth-directive/releases/latest/download/system.zip",
+  "manifest": "https://raw.githubusercontent.com/yalpski/veiled-earth-directive/main/system.json",
+  "download": "https://github.com/yalpski/veiled-earth-directive/archive/refs/heads/main.zip",
   "license": "LICENSE",
   "readme": "README.md",
   "grid": {
