@@ -1,0 +1,31 @@
+<form class="ved-sheet item-sheet race">
+
+  <header class="sheet-header">
+    <img class="profile" data-edit="img" src="{{item.img}}" title="{{item.name}}" />
+    <input type="text" name="name" value="{{item.name}}" placeholder="{{localize 'VED.RaceName'}}" />
+  </header>
+
+  <section class="sheet-body">
+    <div class="row">
+      <label>{{localize 'VED.EssenceCount'}}
+        <input type="number" min="1" max="5" name="system.essenceCount" value="{{system.essenceCount}}" />
+      </label>
+    </div>
+
+    <fieldset>
+      <legend>{{localize 'VED.RacialGift'}}</legend>
+      <label>{{localize 'VED.Name'}}
+        <input type="text" name="system.racialGift.name" value="{{system.racialGift.name}}" />
+      </label>
+      <label>{{localize 'VED.Description'}}
+        <textarea name="system.racialGift.description">{{system.racialGift.description}}</textarea>
+      </label>
+    </fieldset>
+
+    <section class="description">
+      <h3>{{localize 'VED.Description'}}</h3>
+      {{{enrichedDescription}}}
+      <textarea name="system.description">{{system.description}}</textarea>
+    </section>
+  </section>
+</form>

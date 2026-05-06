@@ -1,0 +1,40 @@
+<form class="ved-sheet item-sheet essence">
+
+  <header class="sheet-header">
+    <img class="profile" data-edit="img" src="{{item.img}}" title="{{item.name}}" />
+    <input type="text" name="name" value="{{item.name}}" placeholder="{{localize 'VED.EssenceName'}}" />
+  </header>
+
+  <section class="sheet-body">
+    <div class="row">
+      <label>{{localize 'VED.Rarity'}}
+        <select name="system.rarity">
+          {{#each config.essenceRarities as |label k|}}
+            <option value="{{k}}" {{#if (ved-eq @root.system.rarity k)}}selected{{/if}}>{{localize label}}</option>
+          {{/each}}
+        </select>
+      </label>
+      <label>{{localize 'VED.BoundAttribute'}}
+        <select name="system.boundAttribute">
+          {{#each config.attributes as |attr k|}}
+            <option value="{{k}}" {{#if (ved-eq @root.system.boundAttribute k)}}selected{{/if}}>{{ved-attribute-label k}}</option>
+          {{/each}}
+        </select>
+      </label>
+      <label>{{localize 'VED.IsConfluence'}}
+        <input type="checkbox" name="system.isConfluence" {{checked system.isConfluence}} />
+      </label>
+    </div>
+
+    <section class="description">
+      <h3>{{localize 'VED.Description'}}</h3>
+      {{{enrichedDescription}}}
+      <textarea name="system.description">{{system.description}}</textarea>
+    </section>
+
+    <section class="flavor">
+      <h3>{{localize 'VED.FlavorNotes'}}</h3>
+      <textarea name="system.flavorNotes">{{system.flavorNotes}}</textarea>
+    </section>
+  </section>
+</form>

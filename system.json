@@ -1,0 +1,57 @@
+{
+  "id": "veiled-earth-directive",
+  "title": "The Veiled Earth Directive",
+  "description": "A Foundry VTT system for The Veiled Earth Directive: a modern-occult role-playing game of Soulforged agents, exploding dice, and Magnitude-driven progression.",
+  "version": "0.1.0",
+  "compatibility": {
+    "minimum": "13",
+    "verified": "14",
+    "maximum": "14"
+  },
+  "authors": [
+    {
+      "name": "Veiled Earth Directive Team",
+      "url": "https://github.com/yalpski/veiled-earth-directive"
+    }
+  ],
+  "esmodules": [
+    "module/veiled-earth.mjs"
+  ],
+  "styles": [
+    "styles/veiled-earth.css"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "packs": [],
+  "documentTypes": {
+    "Actor": {
+      "character": {},
+      "npc": {}
+    },
+    "Item": {
+      "skill": {},
+      "essence": {},
+      "race": {},
+      "archetype": {},
+      "gear": {},
+      "condition": {}
+    }
+  },
+  "primaryTokenAttribute": "resources.health",
+  "secondaryTokenAttribute": "resources.mana",
+  "url": "https://github.com/yalpski/veiled-earth-directive",
+  "manifest": "https://github.com/yalpski/veiled-earth-directive/releases/latest/download/system.json",
+  "download": "https://github.com/yalpski/veiled-earth-directive/releases/latest/download/system.zip",
+  "license": "LICENSE",
+  "readme": "README.md",
+  "grid": {
+    "distance": 1,
+    "units": "m"
+  },
+  "initiative": "1d20"
+}

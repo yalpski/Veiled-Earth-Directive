@@ -1,0 +1,28 @@
+<section class="skills">
+  <h2>{{localize 'VED.Skills'}}</h2>
+  {{#each config.attributes as |attr attrKey|}}
+    <div class="skill-group" data-attribute="{{attrKey}}">
+      <header>
+        <h3>{{ved-attribute-label attrKey}}</h3>
+        <button type="button" data-action="createSkill" data-attribute="{{attrKey}}">
+          + {{localize 'VED.AddSkill'}}
+        </button>
+      </header>
+      <ul class="skill-list">
+        {{#each (lookup @root.skillsByAttribute attrKey) as |skill|}}
+          <li class="skill-row" data-item-id="{{skill.id}}">
+            <span class="name">{{skill.name}}</span>
+            <span class="die">{{ved-die skill.system.die}}</span>
+            <span class="cost">{{localize 'VED.Cost'}}: {{ved-tag skill.system.cost.tag}}</span>
+            <span class="effect">{{localize 'VED.Effect'}}: {{ved-tag skill.system.effect.tag}}</span>
+            <span class="actions">
+              <button type="button" data-action="rollSkill" title="{{localize 'VED.Roll'}}">⚀</button>
+              <button type="button" data-action="editItem" title="{{localize 'VED.Edit'}}">✎</button>
+              <button type="button" data-action="deleteItem" title="{{localize 'VED.Delete'}}">✕</button>
+            </span>
+          </li>
+        {{/each}}
+      </ul>
+    </div>
+  {{/each}}
+</section>

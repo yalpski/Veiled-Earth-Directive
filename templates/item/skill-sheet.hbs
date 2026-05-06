@@ -1,0 +1,87 @@
+<form class="ved-sheet item-sheet skill">
+
+  <header class="sheet-header">
+    <img class="profile" data-edit="img" src="{{item.img}}" title="{{item.name}}" />
+    <input type="text" name="name" value="{{item.name}}" placeholder="{{localize 'VED.SkillName'}}" />
+  </header>
+
+  <section class="sheet-body">
+
+    <div class="row">
+      <label>{{localize 'VED.Attribute.Label'}}
+        <select name="system.attribute">
+          {{#each config.attributes as |attr k|}}
+            <option value="{{k}}" {{#if (ved-eq @root.system.attribute k)}}selected{{/if}}>{{ved-attribute-label k}}</option>
+          {{/each}}
+        </select>
+      </label>
+      <label>{{localize 'VED.Magnitude.Label'}}
+        <input type="number" min="0" max="5" name="system.magnitude" value="{{system.magnitude}}" />
+      </label>
+      <label>{{localize 'VED.Generic'}} <input type="checkbox" name="system.generic" {{checked system.generic}} /></label>
+      <label>{{localize 'VED.Reactive'}} <input type="checkbox" name="system.reactive" {{checked system.reactive}} /></label>
+    </div>
+
+    <fieldset>
+      <legend>{{localize 'VED.Die'}}</legend>
+      <div class="row">
+        <label>{{localize 'VED.ChainIndex'}}
+          <input type="number" min="0" name="system.die.chainIndex" value="{{system.die.chainIndex}}" />
+        </label>
+        <span class="readonly">{{ved-die system.die}}</span>
+        <label>{{localize 'VED.AdvancementTally'}}
+          <input type="number" min="0" name="system.die.advancementTally" value="{{system.die.advancementTally}}" />
+        </label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>{{localize 'VED.Cost'}}</legend>
+      <div class="row">
+        <label>{{localize 'VED.Tag.Label'}}
+          <select name="system.cost.tag">
+            {{#each config.tagScale as |t k|}}
+              <option value="{{k}}" {{#if (ved-eq @root.system.cost.tag k)}}selected{{/if}}>{{t.abbr}} — {{localize t.label}}</option>
+            {{/each}}
+          </select>
+        </label>
+        <label>{{localize 'VED.Resource.Label'}}
+          <select name="system.cost.resource">
+            {{#each config.resources as |r k|}}
+              <option value="{{k}}" {{#if (ved-eq @root.system.cost.resource k)}}selected{{/if}}>{{ved-resource-label k}}</option>
+            {{/each}}
+          </select>
+        </label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>{{localize 'VED.Effect'}}</legend>
+      <div class="row">
+        <label>{{localize 'VED.Tag.Label'}}
+          <select name="system.effect.tag">
+            {{#each config.tagScale as |t k|}}
+              <option value="{{k}}" {{#if (ved-eq @root.system.effect.tag k)}}selected{{/if}}>{{t.abbr}} — {{localize t.label}}</option>
+            {{/each}}
+          </select>
+        </label>
+        <label>{{localize 'VED.EffectKind'}}
+          <input type="text" name="system.effect.kind" value="{{system.effect.kind}}" placeholder="damage / healing / utility" />
+        </label>
+      </div>
+    </fieldset>
+
+    <div class="row">
+      <label>{{localize 'VED.Range'}} <input type="text" name="system.range" value="{{system.range}}" /></label>
+      <label>{{localize 'VED.Duration'}} <input type="text" name="system.duration" value="{{system.duration}}" /></label>
+      <label>{{localize 'VED.EssenceFlavor'}} <input type="text" name="system.essence" value="{{system.essence}}" /></label>
+    </div>
+
+    <section class="description">
+      <h3>{{localize 'VED.Description'}}</h3>
+      {{{enrichedDescription}}}
+      <textarea name="system.description">{{system.description}}</textarea>
+    </section>
+
+  </section>
+</form>

@@ -1,0 +1,12 @@
+<section class="conditions">
+  <h3>{{localize 'VED.Conditions'}}</h3>
+  <div class="condition-grid">
+    <label><input type="checkbox" name="system.conditions.surprised" {{checked system.conditions.surprised}} /> {{localize 'VED.Condition.Surprised'}}</label>
+    <label><input type="checkbox" name="system.conditions.stunned" {{checked system.conditions.stunned}} /> {{localize 'VED.Condition.Stunned'}}</label>
+    <label><input type="checkbox" name="system.conditions.prone" {{checked system.conditions.prone}} /> {{localize 'VED.Condition.Prone'}}</label>
+    <label><input type="checkbox" name="system.conditions.grappled" {{checked system.conditions.grappled}} /> {{localize 'VED.Condition.Grappled'}}</label>
+    <label>{{localize 'VED.Condition.Bleeding'}} <input type="number" min="0" name="system.conditions.bleeding" value="{{system.conditions.bleeding}}" /></label>
+    <label>{{localize 'VED.Condition.Poisoned'}} <input type="number" min="0" name="system.conditions.poisoned" value="{{system.conditions.poisoned}}" /></label>
+    <label>{{localize 'VED.Condition.Cursed'}} <input type="number" min="0" name="system.conditions.cursed" value="{{system.conditions.cursed}}" /></label>
+  </div>
+</section>
