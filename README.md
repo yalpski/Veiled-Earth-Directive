@@ -12,7 +12,26 @@ exploding dice, and Magnitude-driven progression.
 - **Verified:** Foundry VTT v14
 - **Minimum:** Foundry VTT v13
 
-## Installation (Development)
+## Installation
+
+### Via Foundry's built-in Game System installer (recommended)
+
+1. Launch Foundry VTT and open the **Game Systems** tab on the setup screen.
+2. Click **Install System**.
+3. Paste the following into the **Manifest URL** field at the bottom of the
+   dialog and click **Install**:
+
+   ```
+   https://github.com/yalpski/veiled-earth-directive/releases/latest/download/system.json
+   ```
+
+4. Once installation finishes, create a world and pick **The Veiled Earth
+   Directive** as its game system.
+
+Foundry will use the same URL to check for updates, so future releases will
+appear in-app automatically.
+
+### Manual / development install
 
 Either symlink the repo into your Foundry data directory:
 
@@ -72,6 +91,22 @@ lang/en.json                      English localization strings
 ## Design Reference
 
 See `The Veiled Earth Directive Overview.md` for the current ruleset draft.
+
+## Releases
+
+Releases (and the artifacts the Foundry installer downloads) are produced by
+the `.github/workflows/release.yml` workflow. To cut a new release, push a tag
+of the form `vX.Y.Z`:
+
+```bash
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+The workflow stamps the version into `system.json`, builds `system.zip`, and
+attaches both files to a GitHub release at
+`https://github.com/yalpski/veiled-earth-directive/releases/latest`, which is
+exactly what the Manifest URL above resolves to.
 
 ## License
 
