@@ -10,6 +10,24 @@ import { SYSTEM_ID, VED } from "../config.mjs";
 const { ActorSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 
+const STACK_CONDITIONS = [
+  {
+    key: "bleeding",
+    icon: "fa-regular fa-droplet",
+    tooltip: "VED.Stack.BleedingTooltip"
+  },
+  {
+    key: "poisoned",
+    icon: "fa-regular fa-skull-crossbones",
+    tooltip: "VED.Stack.PoisonedTooltip"
+  },
+  {
+    key: "cursed",
+    icon: "fa-regular fa-staff-snake",
+    tooltip: "VED.Stack.CursedTooltip"
+  }
+];
+
 class VEDActorSheetBase extends HandlebarsApplicationMixin(ActorSheetV2) {
   static DEFAULT_OPTIONS = {
     classes: ["ved", "sheet", "actor"],
@@ -18,9 +36,12 @@ class VEDActorSheetBase extends HandlebarsApplicationMixin(ActorSheetV2) {
     form: { submitOnChange: true, closeOnSubmit: false },
     actions: {
       rollSkill: VEDActorSheetBase.#onRollSkill,
+      rollAttribute: VEDActorSheetBase.#onRollAttribute,
       createSkill: VEDActorSheetBase.#onCreateSkill,
       editItem: VEDActorSheetBase.#onEditItem,
-      deleteItem: VEDActorSheetBase.#onDeleteItem
+      deleteItem: VEDActorSheetBase.#onDeleteItem,
+      adjustStack: VEDActorSheetBase.#onAdjustStack,
+      triggerStackDamage: VEDActorSheetBase.#onTriggerStackDamage
     }
   };
 
@@ -32,6 +53,10 @@ class VEDActorSheetBase extends HandlebarsApplicationMixin(ActorSheetV2) {
     context.config = VED;
     context.skillsByAttribute = this.#groupSkills();
     context.itemsByType = this.#groupItems();
+    context.stackConditions = STACK_CONDITIONS.map(sc => ({
+      ...sc,
+      value: this.actor.system.conditions?.[sc.key] ?? 0
+    }));
     context.enrichedBiography = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
       this.actor.system.biography ?? "", { async: true, secrets: this.isOwner }
     );
@@ -64,6 +89,12 @@ class VEDActorSheetBase extends HandlebarsApplicationMixin(ActorSheetV2) {
     return this.actor.rollSkill(id);
   }
 
+  static async #onRollAttribute(event, target) {
+    const attr = target.dataset.attribute;
+    if (!attr) return;
+    return this.actor.rollAttribute(attr);
+  }
+
   static async #onCreateSkill(event, target) {
     const attribute = target.dataset.attribute ?? "power";
     await foundry.documents.Item.implementation.create({
@@ -88,6 +119,20 @@ class VEDActorSheetBase extends HandlebarsApplicationMixin(ActorSheetV2) {
       content: `<p>${game.i18n.format("VED.Confirm.DeleteContent", { name: item.name })}</p>`
     });
     if (confirmed) await item.delete();
+  }
+
+  static async #onAdjustStack(event, target) {
+    const condition = target.dataset.condition;
+    if (!condition) return;
+    const current = this.actor.system.conditions?.[condition] ?? 0;
+    const next = event.shiftKey ? Math.max(0, current - 1) : current + 1;
+    await this.actor.update({ [`system.conditions.${condition}`]: next });
+  }
+
+  static async #onTriggerStackDamage(event, target) {
+    const condition = target.dataset.condition;
+    if (!condition) return;
+    return this.actor.triggerConditionDamage(condition);
   }
 }
 

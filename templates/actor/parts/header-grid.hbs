@@ -1,0 +1,60 @@
+{{!-- Shared color-coded header grid: per-attribute essence label, attribute
+     roll button, resource pool, and stack-condition tracker. --}}
+<div class="header-grid essences">
+  {{#each config.attributes as |attr attrKey|}}
+    <input class="essence-input ved-color-{{attrKey}}"
+           type="text"
+           name="system.essenceBindings.{{attrKey}}"
+           value="{{lookup @root.system.essenceBindings attrKey}}"
+           placeholder="{{ved-attribute-label attrKey}} {{localize 'VED.EssencePlaceholder'}}" />
+  {{/each}}
+</div>
+
+<div class="header-grid attributes">
+  {{#each config.attributes as |attr attrKey|}}
+    {{#with (lookup @root.system.attributes attrKey) as |a|}}
+      <button type="button"
+              class="attr-roll ved-color-{{attrKey}}"
+              data-action="rollAttribute"
+              data-attribute="{{attrKey}}"
+              title="{{localize 'VED.Roll'}} {{ved-attribute-label attrKey}}">
+        <span class="label">{{ved-attribute-label attrKey}}</span>
+        <span class="die">{{ved-die a.die}}</span>
+      </button>
+    {{/with}}
+  {{/each}}
+</div>
+
+<div class="header-grid resources">
+  {{#each config.resources as |res resKey|}}
+    {{#with (lookup @root.system.resources resKey) as |r|}}
+      <div class="resource-cell ved-color-{{resKey}}" data-resource="{{resKey}}">
+        <span class="label">{{ved-resource-label resKey}}</span>
+        <div class="bar">
+          <input type="number" name="system.resources.{{resKey}}.value" value="{{r.value}}" />
+          <span>/</span>
+          <input type="number" name="system.resources.{{resKey}}.max" value="{{r.max}}" readonly />
+        </div>
+      </div>
+    {{/with}}
+  {{/each}}
+</div>
+
+<div class="stacks">
+  {{#each (lookup @root 'stackConditions') as |sc|}}
+    <div class="stack stack-{{sc.key}}">
+      <button type="button"
+              class="icon"
+              data-action="triggerStackDamage"
+              data-condition="{{sc.key}}"
+              title="{{localize sc.tooltip}}">
+        <i class="{{sc.icon}}"></i>
+      </button>
+      <button type="button"
+              class="count"
+              data-action="adjustStack"
+              data-condition="{{sc.key}}"
+              title="{{localize 'VED.Stack.AdjustHint'}}">{{sc.value}}</button>
+    </div>
+  {{/each}}
+</div>

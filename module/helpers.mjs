@@ -8,7 +8,7 @@ const TEMPLATES = [
   "systems/" + SYSTEM_ID + "/templates/actor/character-sheet.hbs",
   "systems/" + SYSTEM_ID + "/templates/actor/npc-sheet.hbs",
   "systems/" + SYSTEM_ID + "/templates/actor/parts/skills.hbs",
-  "systems/" + SYSTEM_ID + "/templates/actor/parts/resources.hbs",
+  "systems/" + SYSTEM_ID + "/templates/actor/parts/header-grid.hbs",
   "systems/" + SYSTEM_ID + "/templates/actor/parts/conditions.hbs",
   "systems/" + SYSTEM_ID + "/templates/item/skill-sheet.hbs",
   "systems/" + SYSTEM_ID + "/templates/item/essence-sheet.hbs",
@@ -48,4 +48,18 @@ export function registerHandlebarsHelpers() {
   });
 
   Handlebars.registerHelper("ved-eq", (a, b) => a === b);
+
+  Handlebars.registerHelper("ved-color", (key) => {
+    if (!key) return "";
+    return `ved-color-${key}`;
+  });
+
+  Handlebars.registerHelper("ved-tag-label", (tagKey) => {
+    const tag = VED.tagScale[tagKey];
+    return tag ? game.i18n.localize(tag.label) : "";
+  });
+
+  Handlebars.registerHelper("ved-attribute-resource", (attrKey) => {
+    return VED.attributes[attrKey]?.resource ?? "";
+  });
 }
