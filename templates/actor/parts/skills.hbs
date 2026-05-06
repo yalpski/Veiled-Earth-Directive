@@ -1,28 +1,49 @@
-<section class="skills">
-  <h2>{{localize 'VED.Skills'}}</h2>
-  {{#each config.attributes as |attr attrKey|}}
-    <div class="skill-group" data-attribute="{{attrKey}}">
-      <header>
-        <h3>{{ved-attribute-label attrKey}}</h3>
-        <button type="button" data-action="createSkill" data-attribute="{{attrKey}}">
-          + {{localize 'VED.AddSkill'}}
-        </button>
-      </header>
-      <ul class="skill-list">
+<section class="skills-section">
+  <header>
+    <h2>{{localize 'VED.Skills'}}</h2>
+    <button type="button" data-action="createSkill" data-attribute="power">
+      + {{localize 'VED.AddSkill'}}
+    </button>
+  </header>
+
+  <table class="skills-table">
+    <thead>
+      <tr>
+        <th class="center" title="{{localize 'VED.Reactive'}}">{{localize 'VED.React'}}</th>
+        <th>{{localize 'VED.Name'}}</th>
+        <th class="center">{{localize 'VED.Roll'}}</th>
+        <th>{{localize 'VED.Cost'}}</th>
+        <th>{{localize 'VED.Resource.Label'}}</th>
+        <th>{{localize 'VED.Effect'}}</th>
+        <th>{{localize 'VED.Attribute.Label'}}</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each config.attributes as |attr attrKey|}}
         {{#each (lookup @root.skillsByAttribute attrKey) as |skill|}}
-          <li class="skill-row" data-item-id="{{skill.id}}">
-            <span class="name">{{skill.name}}</span>
-            <span class="die">{{ved-die skill.system.die}}</span>
-            <span class="cost">{{localize 'VED.Cost'}}: {{ved-tag skill.system.cost.tag}}</span>
-            <span class="effect">{{localize 'VED.Effect'}}: {{ved-tag skill.system.effect.tag}}</span>
-            <span class="actions">
-              <button type="button" data-action="rollSkill" title="{{localize 'VED.Roll'}}">⚀</button>
+          <tr class="skill-row" data-item-id="{{skill.id}}">
+            <td class="center react-cell" title="{{skill.system.description}}">
+              {{#if skill.system.reactive}}
+                <i class="fa-regular fa-square-check ved-color-{{skill.system.cost.resource}}"></i>
+              {{else}}
+                <i class="fa-regular fa-square react-grey"></i>
+              {{/if}}
+            </td>
+            <td>{{skill.name}}</td>
+            <td class="center roll-cell" data-action="rollSkill"
+                title="{{skill.system.description}}">{{ved-die skill.system.die}}</td>
+            <td>{{ved-tag skill.system.cost.tag}}</td>
+            <td class="ved-color-{{skill.system.cost.resource}}">{{ved-resource-label skill.system.cost.resource}}</td>
+            <td>{{ved-tag skill.system.effect.tag}}</td>
+            <td class="ved-color-{{skill.system.attribute}}">{{ved-attribute-label skill.system.attribute}}</td>
+            <td class="row-actions">
               <button type="button" data-action="editItem" title="{{localize 'VED.Edit'}}">✎</button>
               <button type="button" data-action="deleteItem" title="{{localize 'VED.Delete'}}">✕</button>
-            </span>
-          </li>
+            </td>
+          </tr>
         {{/each}}
-      </ul>
-    </div>
-  {{/each}}
+      {{/each}}
+    </tbody>
+  </table>
 </section>

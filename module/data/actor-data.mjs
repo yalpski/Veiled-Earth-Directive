@@ -68,7 +68,14 @@ class BaseActorData extends foundry.abstract.TypeDataModel {
         cursed:    new fields.NumberField({ initial: 0, min: 0, integer: true })
       }),
       biography: new fields.HTMLField({ initial: "" }),
-      notes:     new fields.HTMLField({ initial: "" })
+      notes:     new fields.HTMLField({ initial: "" }),
+      // Free-form per-attribute essence labels surfaced in the sheet header.
+      essenceBindings: new fields.SchemaField({
+        power:   new fields.StringField({ initial: "" }),
+        finesse: new fields.StringField({ initial: "" }),
+        soul:    new fields.StringField({ initial: "" }),
+        wit:     new fields.StringField({ initial: "" })
+      })
     };
   }
 }
@@ -92,15 +99,7 @@ export class CharacterData extends BaseActorData {
           description: new fields.StringField({ initial: "" })
         }),
         { initial: [] }
-      ),
-      // Free-form storage for player/GM essence-to-attribute bindings — the
-      // actual Essence items live as embedded items, this is just metadata.
-      essenceBindings: new fields.SchemaField({
-        power:   new fields.StringField({ initial: "" }),
-        finesse: new fields.StringField({ initial: "" }),
-        soul:    new fields.StringField({ initial: "" }),
-        wit:     new fields.StringField({ initial: "" })
-      })
+      )
     });
   }
 }

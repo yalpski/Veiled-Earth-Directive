@@ -10,12 +10,31 @@
   color: var(--color-text-primary, #1c1c1c);
 }
 
+/* ----------------------------------------- */
+/*  Color theming                            */
+/* ----------------------------------------- */
+
+.ved-color-power,   .ved-color-health   { color: maroon; }
+.ved-color-finesse, .ved-color-stamina  { color: darkgoldenrod; }
+.ved-color-soul,    .ved-color-mana     { color: darkslateblue; }
+.ved-color-wit,     .ved-color-recovery { color: darkgreen; }
+
+/* ----------------------------------------- */
+/*  Header                                   */
+/* ----------------------------------------- */
+
 .ved-sheet .sheet-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+  padding-bottom: 0.5rem;
+}
+
+.ved-sheet .header-top {
   display: flex;
   gap: 0.75rem;
   align-items: center;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
-  padding-bottom: 0.5rem;
 }
 
 .ved-sheet .profile {
@@ -52,72 +71,198 @@
   gap: 0.15rem;
 }
 
-.ved-sheet .resources {
+/* ----------------------------------------- */
+/*  Header grid (essences / attrs / resources)*/
+/* ----------------------------------------- */
+
+.ved-sheet .header-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 0.5rem;
-}
-
-.ved-sheet .resource .bar {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.ved-sheet .attributes {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0.5rem;
+  align-items: stretch;
   text-align: center;
 }
 
-.ved-sheet .attributes .attribute {
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  border-radius: 6px;
+.ved-sheet .essence-input {
+  width: 100%;
+  text-align: center;
+  background: transparent;
+  border: 1px dashed rgba(0, 0, 0, 0.15);
+  padding: 0.15rem 0.3rem;
+  font-weight: 600;
+}
+
+.ved-sheet .attr-roll {
+  cursor: pointer;
   padding: 0.4rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  font: inherit;
+}
+
+.ved-sheet .attr-roll:hover {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.ved-sheet .attr-roll .label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.ved-sheet .attr-roll .die {
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.ved-sheet .resource-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0.3rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
   background: rgba(255, 255, 255, 0.4);
 }
 
-.ved-sheet .attributes .die {
-  font-size: 1.3rem;
+.ved-sheet .resource-cell .label {
   font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
-.ved-sheet .skill-group {
-  margin-top: 0.5rem;
+.ved-sheet .resource-cell .bar {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-weight: 600;
 }
 
-.ved-sheet .skill-group header {
+.ved-sheet .resource-cell input[type="number"] {
+  width: 4rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* ----------------------------------------- */
+/*  Stack conditions                         */
+/* ----------------------------------------- */
+
+.ved-sheet .stacks {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.4rem;
+}
+
+.ved-sheet .stack {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  padding: 0.2rem 0.4rem;
+  font-weight: 600;
+}
+
+.ved-sheet .stack-bleeding { color: red; }
+.ved-sheet .stack-poisoned { color: green; }
+.ved-sheet .stack-cursed   { color: rebeccapurple; }
+
+.ved-sheet .stack .icon,
+.ved-sheet .stack .count {
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0.1rem 0.25rem;
+  font: inherit;
+  color: inherit;
+}
+
+.ved-sheet .stack .count {
+  min-width: 1.5rem;
+  text-align: center;
+}
+
+/* ----------------------------------------- */
+/*  Skills table                             */
+/* ----------------------------------------- */
+
+.ved-sheet .skills-section header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 0.3rem;
 }
 
-.ved-sheet .skill-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+.ved-sheet table.skills-table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.ved-sheet .skill-row {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr auto;
-  gap: 0.5rem;
-  align-items: center;
-  padding: 0.25rem 0;
+.ved-sheet table.skills-table th,
+.ved-sheet table.skills-table td {
+  padding: 0.3rem 0.4rem;
   border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+  text-align: left;
 }
 
-.ved-sheet .skill-row .actions button {
+.ved-sheet table.skills-table th {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.ved-sheet table.skills-table td.center,
+.ved-sheet table.skills-table th.center {
+  text-align: center;
+}
+
+.ved-sheet table.skills-table .react-cell i {
+  font-size: 1.05rem;
+}
+
+.ved-sheet table.skills-table .react-cell .react-grey {
+  color: dimgrey;
+}
+
+.ved-sheet table.skills-table .roll-cell {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.ved-sheet table.skills-table .roll-cell:hover {
+  text-decoration: underline;
+}
+
+.ved-sheet table.skills-table .row-actions {
+  white-space: nowrap;
+  text-align: right;
+}
+
+.ved-sheet table.skills-table .row-actions button {
   background: none;
   border: none;
   cursor: pointer;
   font-size: 1rem;
+  padding: 0 0.15rem;
 }
+
+/* ----------------------------------------- */
+/*  Conditions / Biography                   */
+/* ----------------------------------------- */
 
 .ved-sheet .condition-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0.4rem;
 }
 

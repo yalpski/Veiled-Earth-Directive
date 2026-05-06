@@ -9,8 +9,21 @@
  */
 
 import { VED } from "../config.mjs";
+import { ExplodingRoll } from "../dice/exploding-roll.mjs";
 
 const ActorBase = foundry.documents?.Actor ?? globalThis.Actor;
+
+const STACK_DAMAGE_POOLS = {
+  bleeding: ["health"],
+  poisoned: ["health", "stamina"],
+  cursed:   ["health", "mana"]
+};
+
+const STACK_LABELS = {
+  bleeding: "VED.Condition.Bleeding",
+  poisoned: "VED.Condition.Poisoned",
+  cursed:   "VED.Condition.Cursed"
+};
 
 export class VEDActor extends ActorBase {
   /** @override */
@@ -84,6 +97,60 @@ export class VEDActor extends ActorBase {
       return null;
     }
     return skill.roll(options);
+  }
+
+  /**
+   * Roll an attribute directly (no chain advancement — attribute dice mirror
+   * their highest associated skill and aren't advanced by attribute rolls).
+   * @param {string} key  Attribute key (power | finesse | soul | wit).
+   */
+  async rollAttribute(key) {
+    const attr = this.system?.attributes?.[key];
+    if (!attr) return null;
+    const formula = `${attr.die.count}d${attr.die.faces}`;
+    const roll = new ExplodingRoll(formula, {}, {
+      chainIndex: attr.die.chainIndex,
+      magnitude: this.system.magnitude || 1
+    });
+    await roll.evaluate();
+    const label = game.i18n.localize(VED.attributes[key]?.label ?? key);
+    const essence = this.system.essenceBindings?.[key];
+    const flavor = essence
+      ? `<strong class="ved-color-${key}">${label}</strong> <em>(${essence})</em>`
+      : `<strong class="ved-color-${key}">${label}</strong>`;
+    await roll.toMessage({
+      speaker: ChatMessage.getSpeaker({ actor: this }),
+      flavor
+    });
+    return roll;
+  }
+
+  /**
+   * Apply per-stack damage for one of the stacking conditions.
+   * Per the rules: each tick deals magnitude × stacks to the affected pool(s).
+   * @param {"bleeding"|"poisoned"|"cursed"} condition
+   */
+  async triggerConditionDamage(condition) {
+    const pools = STACK_DAMAGE_POOLS[condition];
+    if (!pools) return;
+    const stacks = this.system.conditions?.[condition] ?? 0;
+    if (stacks <= 0) return;
+    const magnitude = this.system.magnitude || 1;
+    const damage = stacks * magnitude;
+
+    const updates = {};
+    for (const pool of pools) {
+      const cur = this.system.resources?.[pool]?.value ?? 0;
+      updates[`system.resources.${pool}.value`] = Math.max(0, cur - damage);
+    }
+    await this.update(updates);
+
+    const label = game.i18n.localize(STACK_LABELS[condition] ?? condition);
+    const poolNames = pools.map(p => game.i18n.localize(VED.resources[p]?.label ?? p)).join(" + ");
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this }),
+      content: `<p><strong>${this.name}</strong> takes <strong>${damage}</strong> ${label} damage to ${poolNames}.</p>`
+    });
   }
 }
 

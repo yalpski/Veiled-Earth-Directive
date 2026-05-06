@@ -75,6 +75,13 @@
   "VED.Roll": "Roll",
   "VED.Edit": "Edit",
   "VED.Delete": "Delete",
+  "VED.React": "React?",
+  "VED.EssencePlaceholder": "Essence",
+
+  "VED.Stack.AdjustHint": "Click to add a stack, Shift-click to remove one",
+  "VED.Stack.BleedingTooltip": "Trigger Bleeding damage",
+  "VED.Stack.PoisonedTooltip": "Trigger Poison damage",
+  "VED.Stack.CursedTooltip": "Trigger Curse damage",
 
   "VED.Rarity": "Rarity",
   "VED.Rarity.Common": "Common",
