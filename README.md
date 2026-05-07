@@ -4,7 +4,7 @@ A game system for [Foundry VTT](https://foundryvtt.com/) implementing
 **The Veiled Earth Directive**: a modern-occult RPG of Soulforged agents,
 exploding dice, and Magnitude-driven progression.
 
-> **Status:** v0.1.0 — initial framework. The system loads, sheets render,
+> **Status:** v0.1.1 — initial framework. The system loads, sheets render,
 > and skills can be created and rolled. Mechanics are still being filled in.
 
 ## Compatibility
@@ -28,10 +28,14 @@ exploding dice, and Magnitude-driven progression.
 4. Once installation finishes, create a world and pick **The Veiled Earth
    Directive** as its game system.
 
-Foundry will use the same URL to check for updates, so future changes pushed
-to `main` will appear in-app automatically. Once tagged releases start being
-published (see [Releases](#releases)), the manifest URL above can be swapped
-for `https://github.com/yalpski/veiled-earth-directive/releases/latest/download/system.json`
+Foundry will use the same URL to check for updates. Note that Foundry's
+update checker compares the `version` string in the installed `system.json`
+against the one served at the manifest URL — it does **not** diff commits or
+files. That means a change pushed to `main` only shows up as an available
+update once `system.json`'s `version` field has been bumped to a higher value
+than the one you have installed. Once tagged releases start being published
+(see [Releases](#releases)), the manifest URL above can be swapped for
+`https://github.com/yalpski/veiled-earth-directive/releases/latest/download/system.json`
 to track stable versions instead of `main`.
 
 ### Manual / development install
