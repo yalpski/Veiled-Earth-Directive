@@ -1,79 +1,397 @@
-/* The Veiled Earth Directive — base sheet styles. Intentionally minimal;
-   we'll layer on theming once layouts settle. */
+/* =====================================================================
+   The Veiled Earth Directive — sheet styling
+   Visual direction: parchment-over-obsidian. Deep indigo/charcoal base
+   washed with a subtle parchment grain, thin gilt rules, per-essence
+   accent colors that glow on focus, and serif headings tracked like a
+   ritual title page.
+   ===================================================================== */
+
+/* --------------------------------------------------------------------- */
+/*  Palette + design tokens                                              */
+/* --------------------------------------------------------------------- */
+
+.application.ved,
+.ved-sheet {
+  /* Surfaces */
+  --ved-bg-deep:    #0b0913;
+  --ved-bg:         #14101e;
+  --ved-bg-raised: #1c1729;
+  --ved-bg-sunken: #0f0c19;
+  --ved-veil:      rgba(255, 248, 224, 0.04);
+
+  /* Foreground */
+  --ved-ink:       #e8dcc4;          /* parchment */
+  --ved-ink-mute:  #a89c84;
+  --ved-ink-faint: #6e6552;
+
+  /* Gilt */
+  --ved-gold:      #c9a64a;
+  --ved-gold-warm: #d9b75c;
+  --ved-gold-deep: #6f5a2c;
+  --ved-gold-rust: #8a6a2a;
+
+  /* Per-essence accents (used both for attributes and their bound
+     resources so the eye can read the link at a glance). */
+  --ved-power:    #c93c4a;   /* blood          → health   */
+  --ved-finesse:  #d4a447;   /* amber/gilt     → stamina  */
+  --ved-soul:     #8e7cd6;   /* twilight iris  → mana     */
+  --ved-wit:      #5fb19c;   /* verdigris      → recovery */
+
+  /* Stack-condition accents */
+  --ved-bleeding: #c93c4a;
+  --ved-poisoned: #6fae5e;
+  --ved-cursed:   #a070d6;
+
+  /* Curves */
+  --ved-radius:   6px;
+  --ved-radius-sm: 3px;
+
+  /* Glows + shadows */
+  --ved-glow-gold: 0 0 0 1px rgba(201, 166, 74, 0.55),
+                   0 0 18px rgba(201, 166, 74, 0.15);
+  --ved-shadow-inset: inset 0 1px 0 rgba(255, 248, 224, 0.04),
+                      inset 0 -1px 0 rgba(0, 0, 0, 0.4);
+
+  /* Type */
+  --ved-font-display:
+      "Cinzel", "Trajan Pro", "IM Fell English SC",
+      "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino,
+      "URW Palladio L", FreeSerif, serif;
+  --ved-font-body:
+      "Signika", "Inter", system-ui, -apple-system, "Segoe UI", Roboto,
+      sans-serif;
+}
+
+/* --------------------------------------------------------------------- */
+/*  Outer window (Foundry ApplicationV2 frame)                           */
+/* --------------------------------------------------------------------- */
+
+.application.ved {
+  background:
+    radial-gradient(120% 90% at 50% 0%,
+      rgba(142, 124, 214, 0.08) 0%,
+      rgba(11, 9, 19, 0) 60%),
+    linear-gradient(180deg, var(--ved-bg) 0%, var(--ved-bg-deep) 100%);
+  color: var(--ved-ink);
+  border: 1px solid var(--ved-gold-deep);
+  border-radius: var(--ved-radius);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.6),
+    0 24px 64px rgba(0, 0, 0, 0.55);
+}
+
+.application.ved .window-header {
+  background:
+    linear-gradient(180deg,
+      rgba(201, 166, 74, 0.12) 0%,
+      rgba(11, 9, 19, 0.0) 100%),
+    var(--ved-bg-deep);
+  border-bottom: 1px solid var(--ved-gold-deep);
+  color: var(--ved-gold-warm);
+  font-family: var(--ved-font-display);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.application.ved .window-header .window-title {
+  color: var(--ved-gold-warm);
+  text-shadow: 0 0 10px rgba(201, 166, 74, 0.25);
+}
+
+.application.ved .window-header button,
+.application.ved .window-header a {
+  color: var(--ved-ink-mute);
+}
+.application.ved .window-header button:hover,
+.application.ved .window-header a:hover {
+  color: var(--ved-gold-warm);
+  text-shadow: 0 0 10px rgba(201, 166, 74, 0.35);
+}
+
+.application.ved .window-content {
+  background: transparent;
+  color: var(--ved-ink);
+}
+
+/* --------------------------------------------------------------------- */
+/*  Sheet root + parchment grain                                         */
+/* --------------------------------------------------------------------- */
 
 .ved-sheet {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  padding: 0.5rem;
-  font-family: var(--font-primary, "Signika", sans-serif);
-  color: var(--color-text-primary, #1c1c1c);
+  gap: 0.85rem;
+  padding: 0.9rem 1rem 1.1rem;
+  font-family: var(--ved-font-body);
+  font-size: 0.95rem;
+  color: var(--ved-ink);
+  position: relative;
+  isolation: isolate;
 }
 
-/* ----------------------------------------- */
-/*  Color theming                            */
-/* ----------------------------------------- */
+/* Subtle parchment-noise layer rendered with inline SVG so the system
+   stays self-contained (no remote asset fetches). */
+.ved-sheet::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.06;
+  mix-blend-mode: screen;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.92  0 0 0 0 0.85  0 0 0 0 0.72  0 0 0 0.6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
 
-.ved-color-power,   .ved-color-health   { color: maroon; }
-.ved-color-finesse, .ved-color-stamina  { color: darkgoldenrod; }
-.ved-color-soul,    .ved-color-mana     { color: darkslateblue; }
-.ved-color-wit,     .ved-color-recovery { color: darkgreen; }
+/* Generic typography reset inside our sheets */
+.ved-sheet h1,
+.ved-sheet h2,
+.ved-sheet h3,
+.ved-sheet h4,
+.ved-sheet legend {
+  font-family: var(--ved-font-display);
+  font-weight: 600;
+  color: var(--ved-gold-warm);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  margin: 0;
+  border: 0;
+}
 
-/* ----------------------------------------- */
-/*  Header                                   */
-/* ----------------------------------------- */
+.ved-sheet h2 { font-size: 0.95rem; }
+.ved-sheet h3 { font-size: 0.85rem; }
+
+.ved-sheet a { color: var(--ved-gold-warm); }
+
+/* --------------------------------------------------------------------- */
+/*  Per-essence color hooks                                              */
+/* --------------------------------------------------------------------- */
+
+.ved-color-power,    .ved-color-health   { color: var(--ved-power); }
+.ved-color-finesse,  .ved-color-stamina  { color: var(--ved-finesse); }
+.ved-color-soul,     .ved-color-mana     { color: var(--ved-soul); }
+.ved-color-wit,      .ved-color-recovery { color: var(--ved-wit); }
+
+.ved-sheet .ved-color-power,
+.ved-sheet .ved-color-health   { --ved-accent: var(--ved-power); }
+.ved-sheet .ved-color-finesse,
+.ved-sheet .ved-color-stamina  { --ved-accent: var(--ved-finesse); }
+.ved-sheet .ved-color-soul,
+.ved-sheet .ved-color-mana     { --ved-accent: var(--ved-soul); }
+.ved-sheet .ved-color-wit,
+.ved-sheet .ved-color-recovery { --ved-accent: var(--ved-wit); }
+
+/* --------------------------------------------------------------------- */
+/*  Form inputs — invisible boxes with gilt undercurves                  */
+/* --------------------------------------------------------------------- */
+
+.ved-sheet input[type="text"],
+.ved-sheet input[type="number"],
+.ved-sheet input[type="search"],
+.ved-sheet select,
+.ved-sheet textarea {
+  background: var(--ved-veil);
+  border: 1px solid transparent;
+  border-bottom: 1px solid var(--ved-gold-deep);
+  border-radius: var(--ved-radius-sm);
+  color: var(--ved-ink);
+  padding: 0.3rem 0.5rem;
+  font-family: inherit;
+  font-size: inherit;
+  transition: border-color 120ms ease, box-shadow 120ms ease,
+              background-color 120ms ease;
+}
+
+.ved-sheet input[type="text"]:hover,
+.ved-sheet input[type="number"]:hover,
+.ved-sheet select:hover,
+.ved-sheet textarea:hover {
+  border-bottom-color: var(--ved-gold);
+}
+
+.ved-sheet input:focus,
+.ved-sheet select:focus,
+.ved-sheet textarea:focus {
+  outline: none;
+  border-color: var(--ved-accent, var(--ved-gold));
+  box-shadow:
+    0 0 0 1px rgba(201, 166, 74, 0.25),
+    0 0 14px color-mix(in srgb, var(--ved-accent, var(--ved-gold)) 35%, transparent);
+  background: rgba(255, 248, 224, 0.06);
+}
+
+.ved-sheet textarea {
+  min-height: 6rem;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.ved-sheet select {
+  appearance: none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--ved-gold) 50%),
+    linear-gradient(135deg, var(--ved-gold) 50%, transparent 50%);
+  background-position:
+    calc(100% - 14px) 55%,
+    calc(100% - 9px) 55%;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  padding-right: 1.6rem;
+}
+
+.ved-sheet input[type="checkbox"] {
+  appearance: none;
+  width: 1rem;
+  height: 1rem;
+  border: 1px solid var(--ved-gold-deep);
+  border-radius: 2px;
+  background: var(--ved-bg-sunken);
+  position: relative;
+  cursor: pointer;
+  vertical-align: -2px;
+}
+.ved-sheet input[type="checkbox"]:checked {
+  border-color: var(--ved-gold);
+  background:
+    radial-gradient(circle at center,
+      rgba(201, 166, 74, 0.45) 0%,
+      rgba(201, 166, 74, 0) 70%),
+    var(--ved-bg-sunken);
+}
+.ved-sheet input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  background: var(--ved-gold-warm);
+  clip-path: polygon(14% 47%, 0 60%, 38% 100%, 100% 22%, 84% 9%, 38% 70%);
+}
+
+/* Generic <button> baseline (specific buttons override below). */
+.ved-sheet button {
+  background: transparent;
+  border: 1px solid var(--ved-gold-deep);
+  border-radius: var(--ved-radius-sm);
+  color: var(--ved-ink);
+  font-family: inherit;
+  padding: 0.25rem 0.6rem;
+  cursor: pointer;
+  transition: border-color 120ms ease, color 120ms ease,
+              box-shadow 120ms ease, background-color 120ms ease;
+}
+.ved-sheet button:hover {
+  border-color: var(--ved-gold);
+  color: var(--ved-gold-warm);
+  box-shadow: var(--ved-glow-gold);
+}
+
+.ved-sheet label {
+  color: var(--ved-ink-mute);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* --------------------------------------------------------------------- */
+/*  Header                                                               */
+/* --------------------------------------------------------------------- */
 
 .ved-sheet .sheet-header {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
-  padding-bottom: 0.5rem;
+  gap: 0.85rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--ved-gold-deep);
+  position: relative;
+}
+
+/* Twin gilt rule under the header — a thin top line and a thicker base. */
+.ved-sheet .sheet-header::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(201, 166, 74, 0.25) 12%,
+    rgba(217, 183, 92, 0.65) 50%,
+    rgba(201, 166, 74, 0.25) 88%,
+    transparent 100%);
 }
 
 .ved-sheet .header-top {
   display: flex;
-  gap: 0.75rem;
+  gap: 1rem;
   align-items: center;
 }
 
+/* Portrait — circular gilt-ring with a soft inner glow. */
 .ved-sheet .profile {
-  width: 64px;
-  height: 64px;
-  border-radius: 6px;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  flex: 0 0 auto;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  border: 1px solid var(--ved-gold);
+  padding: 3px;
+  background: var(--ved-bg-deep);
   object-fit: cover;
+  flex: 0 0 auto;
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(0, 0, 0, 0.5),
+    0 0 22px rgba(201, 166, 74, 0.18);
+  cursor: pointer;
+  transition: box-shadow 200ms ease, transform 200ms ease;
+}
+.ved-sheet .profile:hover {
+  transform: scale(1.02);
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(0, 0, 0, 0.5),
+    0 0 28px rgba(217, 183, 92, 0.45);
 }
 
 .ved-sheet .header-fields {
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.55rem;
+  min-width: 0;
 }
 
 .ved-sheet .header-fields input[name="name"] {
-  font-size: 1.4rem;
-  font-weight: 600;
+  font-family: var(--ved-font-display);
+  font-size: 1.55rem;
+  letter-spacing: 0.08em;
+  color: var(--ved-ink);
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--ved-gold-deep);
+  padding: 0.25rem 0;
+}
+.ved-sheet .header-fields input[name="name"]:focus {
+  border-bottom-color: var(--ved-gold-warm);
+  box-shadow: 0 1px 0 0 var(--ved-gold-warm);
 }
 
 .ved-sheet .row {
   display: flex;
-  gap: 0.6rem;
+  gap: 0.85rem;
   flex-wrap: wrap;
 }
 
-.ved-sheet .row label {
+.ved-sheet .row > label {
   display: flex;
   flex-direction: column;
-  font-size: 0.85rem;
-  gap: 0.15rem;
+  gap: 0.2rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  min-width: 0;
 }
 
-/* ----------------------------------------- */
-/*  Header grid (essences / attrs / resources)*/
-/* ----------------------------------------- */
+/* --------------------------------------------------------------------- */
+/*  Header grids — essences / attributes / resources                     */
+/* --------------------------------------------------------------------- */
 
 .ved-sheet .header-grid {
   display: grid;
@@ -83,201 +401,541 @@
   text-align: center;
 }
 
+/* ---- Essence pillars --------------------------------------------- */
+
+.ved-sheet .header-grid.essences {
+  margin-top: 0.25rem;
+}
+
 .ved-sheet .essence-input {
   width: 100%;
   text-align: center;
-  background: transparent;
-  border: 1px dashed rgba(0, 0, 0, 0.15);
-  padding: 0.15rem 0.3rem;
-  font-weight: 600;
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--ved-accent) 14%, transparent) 0%,
+      transparent 100%);
+  border: 1px solid color-mix(in srgb, var(--ved-accent) 35%, transparent);
+  border-radius: var(--ved-radius-sm);
+  padding: 0.35rem 0.4rem;
+  font-family: var(--ved-font-display);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  color: var(--ved-ink);
+  text-transform: uppercase;
+  position: relative;
+}
+.ved-sheet .essence-input::placeholder {
+  color: color-mix(in srgb, var(--ved-accent) 65%, var(--ved-ink-faint));
+  font-style: italic;
+  letter-spacing: 0.08em;
+  text-transform: none;
+}
+.ved-sheet .essence-input:focus {
+  border-color: var(--ved-accent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--ved-accent) 60%, transparent),
+    0 0 18px color-mix(in srgb, var(--ved-accent) 40%, transparent);
+}
+
+/* ---- Attribute roll buttons -------------------------------------- */
+
+.ved-sheet .header-grid.attributes {
+  gap: 0.55rem;
 }
 
 .ved-sheet .attr-roll {
   cursor: pointer;
-  padding: 0.4rem;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.4);
+  padding: 0.7rem 0.4rem 0.55rem;
+  border: 1px solid color-mix(in srgb, var(--ved-accent) 45%, transparent);
+  border-radius: var(--ved-radius);
+  background:
+    radial-gradient(120% 120% at 50% 0%,
+      color-mix(in srgb, var(--ved-accent) 22%, transparent) 0%,
+      transparent 70%),
+    var(--ved-bg-raised);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.15rem;
+  gap: 0.35rem;
   font: inherit;
+  color: var(--ved-ink);
+  position: relative;
+  box-shadow: var(--ved-shadow-inset);
+  transition: transform 140ms ease, border-color 140ms ease,
+              box-shadow 140ms ease, background-color 140ms ease;
 }
 
 .ved-sheet .attr-roll:hover {
-  background: rgba(255, 255, 255, 0.7);
+  border-color: var(--ved-accent);
+  transform: translateY(-1px);
+  box-shadow:
+    var(--ved-shadow-inset),
+    0 0 22px color-mix(in srgb, var(--ved-accent) 35%, transparent);
+}
+
+.ved-sheet .attr-roll:active {
+  transform: translateY(0);
+  filter: brightness(1.1);
 }
 
 .ved-sheet .attr-roll .label {
-  font-size: 0.8rem;
-  font-weight: 700;
+  font-family: var(--ved-font-display);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  color: color-mix(in srgb, var(--ved-accent) 80%, var(--ved-ink));
 }
 
 .ved-sheet .attr-roll .die {
+  font-family: var(--ved-font-display);
   font-weight: 700;
-  font-size: 1.2rem;
+  font-size: 1.45rem;
+  letter-spacing: 0.04em;
+  color: var(--ved-ink);
+  text-shadow: 0 0 12px color-mix(in srgb, var(--ved-accent) 60%, transparent);
+}
+
+/* ---- Resource pools --------------------------------------------- */
+
+.ved-sheet .header-grid.resources {
+  gap: 0.55rem;
 }
 
 .ved-sheet .resource-cell {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 0.15rem;
-  padding: 0.3rem;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.4);
+  align-items: stretch;
+  gap: 0.3rem;
+  padding: 0.5rem 0.55rem;
+  border: 1px solid color-mix(in srgb, var(--ved-accent) 35%, transparent);
+  border-radius: var(--ved-radius);
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--ved-accent) 8%, var(--ved-bg-sunken)) 0%,
+      var(--ved-bg-sunken) 100%);
+  position: relative;
+  overflow: hidden;
 }
 
 .ved-sheet .resource-cell .label {
-  font-weight: 700;
-  font-size: 0.85rem;
+  font-family: var(--ved-font-display);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  text-align: center;
+  color: color-mix(in srgb, var(--ved-accent) 85%, var(--ved-ink));
 }
 
 .ved-sheet .resource-cell .bar {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
-  font-weight: 600;
+  justify-content: center;
+  gap: 0.35rem;
+  font-family: var(--ved-font-display);
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--ved-ink);
 }
 
 .ved-sheet .resource-cell input[type="number"] {
-  width: 4rem;
+  width: 3.6rem;
   text-align: center;
-  font-weight: 600;
+  font-family: var(--ved-font-display);
+  font-weight: 700;
+  font-size: 1rem;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid
+    color-mix(in srgb, var(--ved-accent) 50%, transparent);
+  padding: 0.15rem 0.2rem;
+  color: var(--ved-ink);
+}
+.ved-sheet .resource-cell input[type="number"][readonly] {
+  color: var(--ved-ink-mute);
+  border-bottom-style: dashed;
+}
+.ved-sheet .resource-cell input[type="number"]:focus {
+  border-bottom-color: var(--ved-accent);
+  box-shadow: 0 1px 0 0 var(--ved-accent);
 }
 
-/* ----------------------------------------- */
-/*  Stack conditions                         */
-/* ----------------------------------------- */
+.ved-sheet .resource-cell .bar > span {
+  color: var(--ved-ink-faint);
+}
+
+/* --------------------------------------------------------------------- */
+/*  Stack-condition tracker (Bleeding / Poisoned / Cursed)               */
+/* --------------------------------------------------------------------- */
 
 .ved-sheet .stacks {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 0.4rem;
+  gap: 0.55rem;
 }
 
 .ved-sheet .stack {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.4rem;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 4px;
-  padding: 0.2rem 0.4rem;
-  font-weight: 600;
+  gap: 0.5rem;
+  padding: 0.35rem 0.6rem;
+  border-radius: var(--ved-radius);
+  font-family: var(--ved-font-display);
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--ved-stack) 16%, transparent) 0%,
+      transparent 100%),
+    var(--ved-bg-sunken);
+  border: 1px solid color-mix(in srgb, var(--ved-stack) 45%, transparent);
+  color: color-mix(in srgb, var(--ved-stack) 90%, var(--ved-ink));
 }
 
-.ved-sheet .stack-bleeding { color: red; }
-.ved-sheet .stack-poisoned { color: green; }
-.ved-sheet .stack-cursed   { color: rebeccapurple; }
+.ved-sheet .stack-bleeding { --ved-stack: var(--ved-bleeding); }
+.ved-sheet .stack-poisoned { --ved-stack: var(--ved-poisoned); }
+.ved-sheet .stack-cursed   { --ved-stack: var(--ved-cursed); }
 
 .ved-sheet .stack .icon,
 .ved-sheet .stack .count {
   cursor: pointer;
-  background: none;
-  border: none;
-  padding: 0.1rem 0.25rem;
+  background: transparent;
+  border: 0;
+  padding: 0.1rem 0.3rem;
   font: inherit;
   color: inherit;
+  border-radius: var(--ved-radius-sm);
+  transition: background-color 120ms ease, box-shadow 120ms ease;
+}
+
+.ved-sheet .stack .icon i {
+  filter: drop-shadow(
+    0 0 6px color-mix(in srgb, var(--ved-stack) 80%, transparent));
+}
+
+.ved-sheet .stack .icon:hover,
+.ved-sheet .stack .count:hover {
+  background: color-mix(in srgb, var(--ved-stack) 18%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--ved-stack) 60%, transparent);
 }
 
 .ved-sheet .stack .count {
-  min-width: 1.5rem;
+  min-width: 1.6rem;
   text-align: center;
+  font-size: 0.95rem;
 }
 
-/* ----------------------------------------- */
-/*  Skills table                             */
-/* ----------------------------------------- */
+/* --------------------------------------------------------------------- */
+/*  Skills section                                                       */
+/* --------------------------------------------------------------------- */
 
-.ved-sheet .skills-section header {
+.ved-sheet .skills-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ved-sheet .skills-section > header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.3rem;
+  align-items: baseline;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px dashed var(--ved-gold-deep);
+}
+
+.ved-sheet .skills-section > header h2::before {
+  content: "✦ ";
+  color: var(--ved-gold);
+  font-size: 0.85em;
+  margin-right: 0.15em;
+}
+
+.ved-sheet .skills-section > header button {
+  font-family: var(--ved-font-display);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 .ved-sheet table.skills-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--ved-bg-sunken);
+  border: 1px solid var(--ved-gold-deep);
+  border-radius: var(--ved-radius);
+  overflow: hidden;
 }
 
-.ved-sheet table.skills-table th,
-.ved-sheet table.skills-table td {
-  padding: 0.3rem 0.4rem;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
-  text-align: left;
+.ved-sheet table.skills-table thead {
+  background:
+    linear-gradient(180deg,
+      rgba(201, 166, 74, 0.10) 0%,
+      rgba(201, 166, 74, 0) 100%);
 }
 
 .ved-sheet table.skills-table th {
-  font-size: 0.75rem;
+  font-family: var(--ved-font-display);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(0, 0, 0, 0.6);
+  color: var(--ved-gold-warm);
+  font-weight: 600;
+  padding: 0.5rem 0.6rem;
+  text-align: left;
+  border-bottom: 1px solid var(--ved-gold-deep);
 }
 
-.ved-sheet table.skills-table td.center,
-.ved-sheet table.skills-table th.center {
+.ved-sheet table.skills-table td {
+  padding: 0.45rem 0.6rem;
+  border-bottom: 1px solid rgba(201, 166, 74, 0.08);
+  color: var(--ved-ink);
+  vertical-align: middle;
+}
+
+.ved-sheet table.skills-table tbody tr:nth-child(odd) td {
+  background: rgba(255, 248, 224, 0.018);
+}
+
+.ved-sheet table.skills-table tbody tr:hover td {
+  background: rgba(201, 166, 74, 0.06);
+}
+
+.ved-sheet table.skills-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.ved-sheet table.skills-table th.center,
+.ved-sheet table.skills-table td.center {
   text-align: center;
 }
 
+/* Reactive marker — if reactive, glow in the cost-resource color. */
 .ved-sheet table.skills-table .react-cell i {
   font-size: 1.05rem;
 }
-
-.ved-sheet table.skills-table .react-cell .react-grey {
-  color: dimgrey;
+.ved-sheet table.skills-table .react-cell i.react-grey {
+  color: var(--ved-ink-faint);
+  filter: none;
+}
+.ved-sheet table.skills-table .react-cell i:not(.react-grey) {
+  filter: drop-shadow(
+    0 0 6px color-mix(in srgb, currentColor 70%, transparent));
 }
 
+/* Roll cell — small die badge that lights on hover. */
 .ved-sheet table.skills-table .roll-cell {
   cursor: pointer;
-  font-weight: 600;
+  font-family: var(--ved-font-display);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--ved-ink);
+  position: relative;
 }
-
+.ved-sheet table.skills-table .roll-cell::before {
+  content: "";
+  position: absolute;
+  inset: 0.15rem 0.5rem;
+  border: 1px solid transparent;
+  border-radius: var(--ved-radius-sm);
+  transition: border-color 120ms ease, background-color 120ms ease,
+              box-shadow 120ms ease;
+}
 .ved-sheet table.skills-table .roll-cell:hover {
-  text-decoration: underline;
+  text-decoration: none;
+  color: var(--ved-gold-warm);
+}
+.ved-sheet table.skills-table .roll-cell:hover::before {
+  border-color: var(--ved-gold);
+  background: rgba(201, 166, 74, 0.08);
+  box-shadow: var(--ved-glow-gold);
 }
 
+/* Row-actions buttons (✎ / ✕) */
 .ved-sheet table.skills-table .row-actions {
   white-space: nowrap;
   text-align: right;
 }
 
 .ved-sheet table.skills-table .row-actions button {
-  background: none;
-  border: none;
+  background: transparent;
+  border: 0;
   cursor: pointer;
   font-size: 1rem;
-  padding: 0 0.15rem;
+  padding: 0 0.25rem;
+  color: var(--ved-ink-mute);
+  transition: color 120ms ease, text-shadow 120ms ease;
+}
+.ved-sheet table.skills-table .row-actions button:hover {
+  color: var(--ved-gold-warm);
+  text-shadow: 0 0 8px rgba(217, 183, 92, 0.5);
+  box-shadow: none;
 }
 
-/* ----------------------------------------- */
-/*  Conditions / Biography                   */
-/* ----------------------------------------- */
+/* --------------------------------------------------------------------- */
+/*  Conditions / Biography                                               */
+/* --------------------------------------------------------------------- */
+
+.ved-sheet .conditions h3,
+.ved-sheet .biography h3,
+.ved-sheet .description h3,
+.ved-sheet .flavor h3 {
+  margin-bottom: 0.4rem;
+}
+
+.ved-sheet .conditions h3::before,
+.ved-sheet .biography h3::before,
+.ved-sheet .description h3::before,
+.ved-sheet .flavor h3::before {
+  content: "❦ ";
+  color: var(--ved-gold);
+  margin-right: 0.15em;
+}
 
 .ved-sheet .condition-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.4rem;
+  gap: 0.45rem;
+}
+
+.ved-sheet .condition-grid > label {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--ved-gold-deep);
+  border-radius: var(--ved-radius);
+  background: var(--ved-bg-sunken);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ved-ink-mute);
+  cursor: pointer;
+  transition: border-color 120ms ease, color 120ms ease,
+              background-color 120ms ease;
+}
+.ved-sheet .condition-grid > label:hover {
+  border-color: var(--ved-gold);
+  color: var(--ved-ink);
+}
+.ved-sheet .condition-grid > label:has(input:checked) {
+  border-color: var(--ved-gold-warm);
+  background:
+    linear-gradient(180deg,
+      rgba(201, 166, 74, 0.14) 0%,
+      rgba(201, 166, 74, 0) 100%),
+    var(--ved-bg-sunken);
+  color: var(--ved-ink);
+  box-shadow: var(--ved-glow-gold);
+}
+
+/* --------------------------------------------------------------------- */
+/*  Item sheets — fieldsets, descriptions, etc.                          */
+/* --------------------------------------------------------------------- */
+
+.ved-sheet.item-sheet .sheet-header {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.ved-sheet.item-sheet .sheet-header .profile {
+  width: 60px;
+  height: 60px;
+}
+
+.ved-sheet.item-sheet .sheet-header input[name="name"] {
+  flex: 1 1 auto;
+  font-family: var(--ved-font-display);
+  font-size: 1.25rem;
+  letter-spacing: 0.08em;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--ved-gold-deep);
+  color: var(--ved-ink);
+  padding: 0.25rem 0;
+}
+.ved-sheet.item-sheet .sheet-header input[name="name"]:focus {
+  border-bottom-color: var(--ved-gold-warm);
+  box-shadow: 0 1px 0 0 var(--ved-gold-warm);
 }
 
 .ved-sheet fieldset {
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  border-radius: 4px;
-  padding: 0.5rem;
+  border: 1px solid var(--ved-gold-deep);
+  border-radius: var(--ved-radius);
+  padding: 0.6rem 0.8rem 0.7rem;
+  background:
+    linear-gradient(180deg,
+      rgba(201, 166, 74, 0.04) 0%,
+      transparent 100%),
+    var(--ved-bg-sunken);
+  position: relative;
 }
 
-.ved-sheet textarea {
-  min-height: 6rem;
-  width: 100%;
+.ved-sheet fieldset legend {
+  padding: 0 0.45rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  color: var(--ved-gold-warm);
+  background: var(--ved-bg-deep);
+  border: 1px solid var(--ved-gold-deep);
+  border-radius: var(--ved-radius-sm);
 }
 
 .ved-sheet .readonly {
-  font-weight: 600;
+  font-family: var(--ved-font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
   align-self: center;
+  color: var(--ved-gold-warm);
+  text-shadow: 0 0 10px rgba(217, 183, 92, 0.25);
+}
+
+.ved-sheet .description,
+.ved-sheet .biography,
+.ved-sheet .flavor {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+/* Foundry's enriched-content wrapper inside our sheets. */
+.ved-sheet .editor,
+.ved-sheet .prosemirror,
+.ved-sheet .editor-content {
+  background: var(--ved-bg-sunken);
+  border: 1px solid var(--ved-gold-deep);
+  border-radius: var(--ved-radius);
+  color: var(--ved-ink);
+}
+
+/* --------------------------------------------------------------------- */
+/*  Scrollbars (where the browser respects it)                           */
+/* --------------------------------------------------------------------- */
+
+.ved-sheet *::-webkit-scrollbar { width: 8px; height: 8px; }
+.ved-sheet *::-webkit-scrollbar-track { background: var(--ved-bg-deep); }
+.ved-sheet *::-webkit-scrollbar-thumb {
+  background: var(--ved-gold-deep);
+  border-radius: 4px;
+}
+.ved-sheet *::-webkit-scrollbar-thumb:hover { background: var(--ved-gold); }
+
+.ved-sheet * {
+  scrollbar-color: var(--ved-gold-deep) var(--ved-bg-deep);
+  scrollbar-width: thin;
+}
+
+/* --------------------------------------------------------------------- */
+/*  Compact responsive collapse                                          */
+/* --------------------------------------------------------------------- */
+
+@media (max-width: 560px) {
+  .ved-sheet .header-grid { grid-template-columns: repeat(2, 1fr); }
+  .ved-sheet .condition-grid { grid-template-columns: repeat(2, 1fr); }
+  .ved-sheet .stacks { grid-template-columns: 1fr; }
 }
