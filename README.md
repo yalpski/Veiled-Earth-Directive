@@ -4,8 +4,9 @@ A game system for [Foundry VTT](https://foundryvtt.com/) implementing
 **The Veiled Earth Directive**: a modern-occult RPG of Soulforged agents,
 exploding dice, and Magnitude-driven progression.
 
-> **Status:** v0.1.1 — initial framework. The system loads, sheets render,
-> and skills can be created and rolled. Mechanics are still being filled in.
+> **Status:** v0.2.0 — initial framework with the first occult-themed
+> sheet styling pass. The system loads, sheets render, and skills can be
+> created and rolled. Mechanics are still being filled in.
 
 ## Compatibility
 

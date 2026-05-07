@@ -2,7 +2,7 @@
   "id": "veiled-earth-directive",
   "title": "The Veiled Earth Directive",
   "description": "A Foundry VTT system for The Veiled Earth Directive: a modern-occult role-playing game of Soulforged agents, exploding dice, and Magnitude-driven progression.",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "compatibility": {
     "minimum": "13",
     "verified": "14",
